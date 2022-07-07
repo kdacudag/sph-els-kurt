@@ -13,12 +13,18 @@ const localStore = () => {
     return false;
   }
 };
-
+const localStorageToken = () => {
+  if (localStorage.getItem("token")) {
+    return localStorage.getItem("token");
+  } else {
+    return false;
+  }
+};
 const INITIAL_STATE = {
   isSignedIn: localStore().isSignedIn,
   user: localStore().user,
   errors: {},
-  token: localStore().token,
+  token: localStorageToken(),
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -30,10 +36,10 @@ export default (state = INITIAL_STATE, action) => {
           ...state,
           isSignedIn: true,
           user: action.payload.data.user,
-          token: action.payload.data.token,
           errors: {},
         })
       );
+      localStorage.setItem("token", action.payload.data.token);
 
       return {
         ...state,
