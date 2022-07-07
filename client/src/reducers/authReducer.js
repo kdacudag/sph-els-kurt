@@ -18,6 +18,7 @@ const INITIAL_STATE = {
   isSignedIn: localStore().isSignedIn,
   user: localStore().user,
   errors: {},
+  token: localStore().token,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -28,12 +29,18 @@ export default (state = INITIAL_STATE, action) => {
         JSON.stringify({
           ...state,
           isSignedIn: true,
-          user: action.payload,
+          user: action.payload.data.user,
+          token: action.payload.data.token,
           errors: {},
         })
       );
 
-      return { ...state, isSignedIn: true, user: action.payload, errors: {} };
+      return {
+        ...state,
+        isSignedIn: true,
+        user: action.payload.data.user,
+        errors: {},
+      };
     case SIGN_IN_ERROR:
       return { ...state, errors: action.payload };
     case SIGN_OUT:
