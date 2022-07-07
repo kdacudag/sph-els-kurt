@@ -4,7 +4,7 @@ const axios = Axios.create({
   baseURL: process.env.REACT_APP_BACKEND_URL,
   headers: {
     "X-Requested-With": "XMLHttpRequest",
-    "Bearer-Token": localStorage.getItem("token"),
+    "Bearer-Token": localStorage.getItem("user")?.token,
   },
 });
 
