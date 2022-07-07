@@ -28,17 +28,22 @@ import axios from "lib/axios";
 const csrf = () => axios.get("/sanctum/csrf-cookie");
 
 export const signIn = (values) => async (dispatch) => {
-  await csrf();
-
-  const response = await axios.post("/login", values).catch((error) => {
-    if (error.response.status !== 422) throw error;
-
-    dispatch({
-      type: SIGN_IN_ERROR,
-      payload: Object.values(error.response.data.errors).flat(),
-    });
+  await csrf().then((res) => {
+    axios
+      .post("/login", values)
+      .then((res) => {
+        dispatch({
+          type: SIGN_IN,
+          payload: res.data,
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: SIGN_IN_ERROR,
+          payload: error.response.data.errors,
+        });
+      });
   });
-  dispatch({ type: SIGN_IN, payload: response.data });
 };
 
 export const signUp = (values) => async (dispatch) => {
