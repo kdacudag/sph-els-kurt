@@ -24,11 +24,13 @@ import {
   DELETE_USER,
 } from "./types";
 import axios from "lib/axios";
+import Cookies from "js-cookie";
 
 const csrf = () => axios.get("/sanctum/csrf-cookie");
 
 export const signIn = (values) => async (dispatch) => {
   await csrf().then((res) => {
+    Cookies.set("X-XSRF-TOKEN", Cookies.get("XSRF-TOKEN"));
     axios
       .post("/login", values)
       .then((res) => {
